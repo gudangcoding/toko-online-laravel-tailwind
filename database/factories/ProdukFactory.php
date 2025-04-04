@@ -24,10 +24,10 @@ class ProdukFactory extends Factory
         return [
             'nama' => fake()->word(),
             'deskripsi' => fake()->text(),
-            'harga' => fake()->randomFloat(2, 0, 9999999999999999.99),
+            'harga' => fake()->randomFloat(2, 0, 99999.99),
             'satuan' => fake()->word(),
             'ukuran' => fake()->word(),
-            'stok' => fake()->numberBetween(-10000, 10000),
+            'stok' => fake()->numberBetween(1, 1000),
             'gambar' => fake()->word(),
             'kategori_id' => Kategori::factory(),
         ];

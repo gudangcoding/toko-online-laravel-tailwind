@@ -1,27 +1,17 @@
 @extends('layouts.app')
 @section('content')
-  <!-- Konten Dashboard -->
-  <div class="container mx-auto px-20 py-16">
+<!-- Konten Dashboard -->
+<div class="container mx-auto px-20 py-16">
     <div class="flex gap-8">
         <!-- Menu Kiri -->
         <div class="w-1/4">
             <div class="bg-white shadow-lg rounded-lg p-6">
                 <div class="space-y-4">
-                    <a href="#" class="block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                        Dashboard
-                    </a>
-                    <a href="{{ route('order.index') }}" class="block text-gray-700 px-4 py-2 rounded hover:bg-gray-100">
-                        Pesanan Saya
-                    </a>
-                    <a href="{{ route('pelanggan.profil', Auth::user()->id) }}" class="block text-gray-700 px-4 py-2 rounded hover:bg-gray-100">
-                        Profil
-                    </a>
-                    <a href="{{ route('pelanggan.gantipass', Auth::user()->id) }}" class="block text-gray-700 px-4 py-2 rounded hover:bg-gray-100">
-                        Ganti Password
-                    </a>
-                    <a href="{{ route('pelanggan.logout') }}" class="block text-red-500 px-4 py-2 rounded hover:bg-red-50">
-                        Keluar
-                    </a>
+                    <a href="#" class="block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Dashboard</a>
+                    <a href="{{ route('order.index') }}" class="block text-gray-700 px-4 py-2 rounded hover:bg-gray-100">Pesanan Saya</a>
+                    <a href="{{ route('pelanggan.profil', Auth::user()->id) }}" class="block text-gray-700 px-4 py-2 rounded hover:bg-gray-100">Profil</a>
+                    <a href="{{ route('pelanggan.gantipass', Auth::user()->id) }}" class="block text-gray-700 px-4 py-2 rounded hover:bg-gray-100">Ganti Password</a>
+                    <a href="{{ route('pelanggan.logout') }}" class="block text-red-500 px-4 py-2 rounded hover:bg-red-50">Keluar</a>
                 </div>
             </div>
         </div>
@@ -35,19 +25,15 @@
                 <div class="grid grid-cols-3 gap-6 mb-8">
                     <div class="bg-blue-50 p-6 rounded-lg">
                         <h3 class="text-lg font-semibold mb-2">Total Pesanan</h3>
-                        <p class="text-3xl font-bold text-blue-600">{{ $orders->count() }}</p>
+                        <p class="text-3xl font-bold text-blue-600">{{ $total }}</p>
                     </div>
                     <div class="bg-green-50 p-6 rounded-lg">
                         <h3 class="text-lg font-semibold mb-2">Pesanan Selesai</h3>
-                        <p class="text-3xl font-bold text-green-600">
-                            {{ $orders->where('status', 'selesai')->count() }}
-                        </p>
+                        <p class="text-3xl font-bold text-green-600">{{ $selesai }}</p>
                     </div>
                     <div class="bg-yellow-50 p-6 rounded-lg">
                         <h3 class="text-lg font-semibold mb-2">Pesanan Proses</h3>
-                        <p class="text-3xl font-bold text-yellow-600">
-                            {{ $orders->where('status', 'proses')->count() }}
-                        </p>
+                        <p class="text-3xl font-bold text-yellow-600">{{ $proses }}</p>
                     </div>
                 </div>
 
@@ -66,28 +52,31 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200">
-                                @foreach($orders->take(5) as $order)
+                                @foreach($order->take(5) as $item)
                                 <tr>
-                                    <td class="px-6 py-4">#ORD{{ str_pad($order->id, 3, '0', STR_PAD_LEFT) }}</td>
-                                    <td class="px-6 py-4">{{ $order->created_at->format('d/m/Y') }}</td>
-                                    <td class="px-6 py-4">Rp {{ number_format($order->total, 0, ',', '.') }}</td>
+                                    <td class="px-6 py-4">#ORD{{ str_pad($item->id, 3, '0', STR_PAD_LEFT) }}</td>
+                                    <td class="px-6 py-4">{{ $item->created_at->format('d/m/Y') }}</td>
+                                    <td class="px-6 py-4">Rp {{ number_format($item->total, 0, ',', '.') }}</td>
                                     <td class="px-6 py-4">
                                         <span class="px-2 py-1 rounded-full text-xs font-semibold
-                                            @if($order->status == 'selesai') bg-green-100 text-green-800
-                                            @elseif($order->status == 'proses') bg-yellow-100 text-yellow-800
+                                            @if($item->status == 'selesai') bg-green-100 text-green-800
+                                            @elseif($item->status == 'proses') bg-yellow-100 text-yellow-800
                                             @else bg-gray-100 text-gray-800 @endif">
-                                            {{ ucfirst($order->status) }}
+                                            {{ ucfirst($item->status) }}
                                         </span>
                                     </td>
                                     <td class="px-2 py-2">
-                                        <a href="{{ route('order.detail', $order->id) }}"   class="bg-orange-500 text-white px-2 py-1 rounded hover:bg-blue-600">
-                                            Lihat Detail                                        </a>
+                                        <a href="{{ route('order.detail', $item->id) }}" class="bg-orange-500 text-white px-2 py-1 rounded hover:bg-blue-600">
+                                            Lihat Detail
+                                        </a>
                                     </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                        {{ $orders->links() }}
+                        <div class="mt-4">
+                            {{ $order->links() }}
+                        </div>
                     </div>
                 </div>
             </div>

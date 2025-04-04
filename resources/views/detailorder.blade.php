@@ -36,7 +36,7 @@
                     <p><strong>Tanggal Pesanan:</strong> {{ $order->created_at->format('d M Y') }}</p>
                     <p><strong>Status Pembayaran:</strong> {{ ucfirst($order->status_pembayaran) }}</p>
                     <p><strong>Status Pesanan:</strong> {{ ucfirst($order->status) }}</p>
-                    <p><strong>Alamat Pengiriman:</strong> {{ $order->alamat_pengiriman }}</p>
+                    <p><strong>Alamat Pengiriman:</strong> {{ $order->user->alamat }}</p>
                 </div>
 
                 <!-- Daftar Produk -->
@@ -51,7 +51,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($order->details as $detail)
+                            @foreach($order->orderDetail as $detail)
                                 <tr class="border-t">
                                     <td class="px-4 py-2">{{ $detail->produk->nama }}</td>
                                     <td class="px-4 py-2">{{ $detail->jumlah }}</td>

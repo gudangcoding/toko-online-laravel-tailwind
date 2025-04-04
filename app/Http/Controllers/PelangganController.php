@@ -11,7 +11,8 @@ use App\Models\User;
 class PelangganController extends Controller
 {
     // Menampilkan halaman login & pendaftaran
-    public function login_view() {
+    public function login_view()
+    {
         if (Auth::check()) {
             return redirect()->route('order.index');
         }
@@ -20,23 +21,28 @@ class PelangganController extends Controller
     }
 
     // Dashboard pengguna setelah login
-    public function dashboard() {
+    public function dashboard()
+    {
         return view("dashboard");
     }
 
     // Menampilkan halaman profil pengguna
-    public function profil() {
-        return view("profil");
+    public function profil()
+    {
+        $user = Auth::user();
+        return view("profil", compact("user"));
     }
 
     // Menampilkan daftar order pengguna
-    public function order() {
+    public function order()
+    {
         return view("order");
     }
 
     // Menampilkan halaman ganti password
-    public function gantipassword(Request $request) {
-    
+    public function gantipassword(Request $request)
+    {
+
         $request->validate(['email' => 'required|email']);
 
         $status = Password::sendResetLink($request->only('email'));
@@ -44,17 +50,19 @@ class PelangganController extends Controller
         return $status === Password::RESET_LINK_SENT
             ? back()->with(['status' => __($status)])
             : back()->withErrors(['email' => __($status)]);
-    
+
     }
 
     // Logout pengguna
-    public function logout() {
+    public function logout()
+    {
         Auth::logout();
         return redirect('/login')->with('success', 'Berhasil logout.');
     }
 
     // Proses login pengguna
-    public function login_aksi(Request $request) {
+    public function login_aksi(Request $request)
+    {
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|min:6',
@@ -68,7 +76,8 @@ class PelangganController extends Controller
     }
 
     // Proses pendaftaran pengguna
-   public function daftar_aksi(Request $request) {
+    public function daftar_aksi(Request $request)
+    {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
@@ -86,5 +95,42 @@ class PelangganController extends Controller
         ]);
 
         return redirect('/login')->with('success', 'Registrasi berhasil, silakan login.');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'no_hp' => 'nullable|string|max:20',
+            'alamat' => 'nullable|string|max:500',
+        ]);
+
+        $user = User::findOrFail(Auth::user()->id);
+        $user->update($request->only(['name', 'email', 'no_hp', 'alamat']));
+
+        return redirect()->route('pelanggan.profil', $user->id)->with('success', 'Profil berhasil diperbarui.');
+    }
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required|min:6|confirmed',
+        ]);
+
+        $user = Auth::guard('web')->user();
+
+        if (!Hash::check($request->old_password, $user->password)) {
+            return back()->with('error', 'Password lama tidak sesuai.');
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return back()->with('success', 'Password berhasil diperbarui.');
+    }
+    public function gantipass($id)
+    {
+        return view('gantipass');
     }
 }
