@@ -19,7 +19,7 @@ Route::get('/', function () {
 Route::get('/login', [PelangganController::class, 'login_view'])->name('pelanggan.index');
 Route::post('/aksi_login', [PelangganController::class, 'login_aksi'])->name('pelanggan.login');
 Route::post('/aksi_daftar', [PelangganController::class, 'daftar_aksi'])->name('pelanggan.daftar');
-Route::get('/reqpass', [PelangganController::class, 'gantipassword'])->name('pelanggan.reqpass');
+Route::post('/reqpass', [PelangganController::class, 'gantipassword'])->name('pelanggan.reqpass');
 
 // Produk, Tentang Kami, Blog, Kontak — akses publik
 Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
