@@ -1,0 +1,26 @@
+created:
+    - database/factories/KategoriFactory.php
+    - database/factories/ProdukFactory.php
+    - database/factories/OrderFactory.php
+    - database/factories/OrderDetailFactory.php
+    - database/factories/BlogFactory.php
+    - database/migrations/2025_04_04_030022_create_kategoris_table.php
+    - database/migrations/2025_04_04_030023_create_produks_table.php
+    - database/migrations/2025_04_04_030024_create_orders_table.php
+    - database/migrations/2025_04_04_030025_create_order_details_table.php
+    - database/migrations/2025_04_04_030026_create_blogs_table.php
+    - app/Models/Kategori.php
+    - app/Models/Produk.php
+    - app/Models/Order.php
+    - app/Models/OrderDetail.php
+    - app/Models/Blog.php
+    - database/seeders/KategoriSeeder.php
+    - database/seeders/ProdukSeeder.php
+    - database/seeders/BlogSeeder.php
+models:
+    User: { name: string, no_hp: 'string nullable', alamat: 'string nullable', email: string, email_verified_at: 'timestamp nullable', password: string, remember_token: 'string:100 nullable' }
+    Kategori: { nama: string, deskripsi: text }
+    Produk: { nama: string, deskripsi: text, harga: 'decimal:18,2', satuan: string, ukuran: string, stok: integer, gambar: string, kategori_id: 'id foreign:Kategori' }
+    Order: { user_id: 'id foreign:users', total_harga: 'decimal:18,2', status: 'enum:pending,proses,dikirim,komplain,selesai default:pending', status_pembayaran: 'enum:pending,dibayar,gagalselesai default:pending' }
+    OrderDetail: { order_id: 'id foreign:Order', produk_id: 'id foreign:Produk', jumlah: integer, harga: 'decimal:18,2', subtotal: 'decimal:18,2' }
+    Blog: { judul: string, konten: text, gambar: string, user_id: 'id foreign:users', tanggal_publikasi: timestamp }

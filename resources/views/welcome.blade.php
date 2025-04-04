@@ -1,0 +1,6 @@
+@include('layouts.part.header')
+@include('layouts.part.hero')
+@include('layouts.part.why')
+@include('layouts.part.testimoni')
+@include('layouts.part.produk')
+@include('layouts.part.footer')

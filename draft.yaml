@@ -1,0 +1,40 @@
+models:
+  Kategori:
+    nama: string
+    deskripsi: text
+
+  Produk:
+    nama: string
+    deskripsi: text
+    harga: decimal:18,2
+    satuan: string
+    ukuran: string
+    stok: integer
+    gambar: string
+    kategori_id: id foreign:Kategori
+
+
+  Order:
+    user_id: id foreign:users
+    total_harga: decimal:18,2
+    status: enum:pending,proses,dikirim,komplain,selesai default:pending
+    status_pembayaran: enum:pending,dibayar,gagalselesai default:pending
+
+  OrderDetail:
+    order_id: id foreign:Order
+    produk_id: id foreign:Produk
+    jumlah: integer
+    harga: decimal:18,2
+    subtotal: decimal:18,2
+
+  Blog:
+    judul: string
+    konten: text
+    gambar: string
+    user_id: id foreign:users
+    tanggal_publikasi: timestamp
+
+seeders: Kategori,Produk,Blog 
+
+# controllers:
+  # ...
