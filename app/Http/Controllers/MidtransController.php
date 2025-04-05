@@ -15,8 +15,8 @@ class MidtransController extends Controller
         $order = Order::with('orderDetail.produk', 'user')->findOrFail($request->order_id);
 
         // Konfigurasi Midtrans
-        Config::$serverKey = config('midtrans.server_key');
-        Config::$isProduction = config('midtrans.is_production');
+        Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
         Config::$isSanitized = true;
         Config::$is3ds = true;
 
@@ -64,41 +64,41 @@ class MidtransController extends Controller
     public function handleCallback(Request $request)
     {
         // Ambil data dari query string
-    $orderId = $request->order_id; // Contoh: ORD-003-1743812033
-    $status = $request->transaction_status; // settlement, pending, etc
+        $orderId = $request->order_id; // Contoh: ORD-003-1743812033
+        $status = $request->transaction_status; // settlement, pending, etc
 
-    // Ambil ID asli dari order_id
-    $parts = explode('-', $orderId); // ['ORD', '003', '1743812033']
-    $id = isset($parts[1]) ? (int) ltrim($parts[1], '0') : null;
+        // Ambil ID asli dari order_id
+        $parts = explode('-', $orderId); // ['ORD', '003', '1743812033']
+        $id = isset($parts[1]) ? (int) ltrim($parts[1], '0') : null;
 
-    if (!$id) {
-        return redirect()->route('home')->with('error', 'Order ID tidak valid');
-    }
+        if (!$id) {
+            return redirect()->route('home')->with('error', 'Order ID tidak valid');
+        }
 
-    $order = Order::find($id);
-    if (!$order) {
-        return redirect()->route('home')->with('error', 'Order tidak ditemukan');
-    }
+        $order = Order::find($id);
+        if (!$order) {
+            return redirect()->route('home')->with('error', 'Order tidak ditemukan');
+        }
 
-    // Update status pembayaran berdasarkan transaction_status
-    switch ($status) {
-        case 'settlement':
-        case 'capture':
-            $order->status_pembayaran = 'dibayar';
-            break;
-        case 'pending':
-            $order->status_pembayaran = 'pending';
-            break;
-        case 'deny':
-        case 'cancel':
-        case 'expire':
-            $order->status_pembayaran = 'gagal';
-            break;
-    }
+        // Update status pembayaran berdasarkan transaction_status
+        switch ($status) {
+            case 'settlement':
+            case 'capture':
+                $order->status_pembayaran = 'dibayar';
+                break;
+            case 'pending':
+                $order->status_pembayaran = 'pending';
+                break;
+            case 'deny':
+            case 'cancel':
+            case 'expire':
+                $order->status_pembayaran = 'gagal';
+                break;
+        }
 
-    $order->save();
+        $order->save();
 
-    return redirect()->route('order.detail',$id)->with('success', 'Pembayaran berhasil diproses');
+        return redirect()->route('order.detail', $id)->with('success', 'Pembayaran berhasil diproses');
 
     }
 
