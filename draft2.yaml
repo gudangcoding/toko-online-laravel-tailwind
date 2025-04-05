@@ -1,0 +1,54 @@
+models:
+  Categories:
+    name: string
+    relationships:
+      hasMany: Product
+
+  Product:
+    Categories_id: foreignId:Categories
+    name: string
+    description: longtext
+    image: string
+    price: integer
+    stock: integer
+    relationships:
+      hasMany: OrderItem
+
+  Order:
+    user_id: foreignId:user
+    total: integer
+    status: enum:pending,paid,shipped,delivered,canceled default:pending
+    payment_status: enum:unpaid,paid
+    shipping_status: enum:pending,shipped,delivered,canceled default:pending
+    relationships:
+      hasMany: OrderItem
+      belongsTo: user, shipping, payment
+
+  OrderItem:
+    order_id: foreignId:order
+    product_id: foreignId:product
+    quantity: integer
+    price: integer
+    relationships:
+      belongsTo: order, product
+
+  Payment:
+    order_id: foreignId:order
+    payment_type: string
+    payment_code: string
+    payment_status: enum:pending,paid,failed default:pending
+    timestamps: true
+    relationships:
+      hasMany: order
+
+  Shipping:
+    order_id: foreignId:order
+    courier: string
+    service: string
+    cost: integer
+    tracking_number: string
+    timestamps: true
+    relationships:
+      hasMany: order
+
+seeders: Categories, product, user, order, order_item

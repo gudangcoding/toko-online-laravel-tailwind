@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MidtransController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
@@ -29,6 +30,17 @@ Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{id}', [BlogController::class, 'detail'])->name('blog.detail');
 Route::get('/kontak', [KontakController::class, 'index'])->name('kontak.index');
 
+//cart
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/tambah/{id}', [CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/update/{id}', [CartController::class, 'updateCart'])->name('cart.update');
+Route::post('/cart/hapus/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+
+//midtrans
+Route::get('/midtrans/bayar', [MidtransController::class, 'bayar'])->name('midtrans.bayar');
+Route::get('/midtrans/callback', [MidtransController::class, 'handleCallback'])->name('midtrans.callback');
+
+
 // Group Route yang Wajib Login
 Route::middleware(['auth'])->group(function () {
     
@@ -40,10 +52,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/updatepass', [PelangganController::class, 'updatePassword'])->name('pelanggan.updatePassword');
 
     // Cart
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/tambah/{id}', [CartController::class, 'addToCart'])->name('cart.add');
-    Route::post('/cart/update/{id}', [CartController::class, 'updateCart'])->name('cart.update');
-    Route::post('/cart/hapus/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
     Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 
     // Order

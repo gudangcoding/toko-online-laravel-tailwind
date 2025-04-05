@@ -120,7 +120,7 @@ class CartController extends Controller
         // Hapus keranjang dari sesi
         session()->forget('cart');
 
-        return redirect()->route('order.success')->with('success', 'Pesanan berhasil dibuat. Silakan lakukan pembayaran.');
+        return redirect()->route('order.detail', $order->id)->with('success', 'Pesanan berhasil dibuat. Silakan lakukan pembayaran.');
     }
     public function destroy($id)
     {
