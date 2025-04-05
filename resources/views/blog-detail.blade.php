@@ -3,34 +3,17 @@
   <!-- Konten Detail Blog -->
   <div class="container mx-auto px-20 py-16">
     <div class="max-w-4xl mx-auto">
-        <h1 class="text-4xl font-bold mb-6">Tips Memilih Besi Beton Berkualitas untuk Konstruksi</h1>
+        <h1 class="text-4xl font-bold mb-6">{{ $detail->judul }}</h1>
         
         <div class="flex items-center text-gray-600 mb-8">
-            <span class="mr-4">12 Maret 2024</span>
-            <span>Oleh: Tim Teknis PT Baja Makmur</span>
+            <span class="mr-4">{{ $detail->created_at }}</span>
+            <span>Oleh: {{ $detail->user->name }}</span>
         </div>
 
-        <img src="img/blog-detail.jpg" alt="Tips Memilih Besi" class="w-full h-96 object-cover rounded-lg mb-8">
+        <img src="{{ asset('storage/' . $detail->gambar) }}" alt="Tips Memilih Besi" class="w-full h-96 object-cover rounded-lg mb-8">
 
         <div class="prose max-w-none">
-            <p class="text-gray-700 mb-6">
-                Memilih besi beton yang tepat merupakan langkah krusial dalam memastikan kekuatan dan ketahanan struktur bangunan. Artikel ini akan membahas beberapa tips penting dalam memilih besi beton berkualitas untuk proyek konstruksi Anda.
-            </p>
-
-            <h2 class="text-2xl font-semibold mb-4">1. Perhatikan Standar Kualitas</h2>
-            <p class="text-gray-700 mb-6">
-                Pastikan besi beton yang Anda pilih memenuhi standar SNI (Standar Nasional Indonesia). Standar ini mencakup berbagai aspek seperti kekuatan tarik, kelenturan, dan komposisi material.
-            </p>
-
-            <h2 class="text-2xl font-semibold mb-4">2. Periksa Spesifikasi Teknis</h2>
-            <p class="text-gray-700 mb-6">
-                Setiap proyek konstruksi memiliki kebutuhan spesifik. Perhatikan diameter, panjang, dan grade besi beton yang sesuai dengan kebutuhan proyek Anda.
-            </p>
-
-            <h2 class="text-2xl font-semibold mb-4">3. Pilih Supplier Terpercaya</h2>
-            <p class="text-gray-700 mb-6">
-                Bekerja sama dengan supplier berpengalaman dan terpercaya akan memastikan Anda mendapatkan produk berkualitas dengan pelayanan yang profesional.
-            </p>
+            {{ $detail->konten }}
         </div>
 
         <!-- Bagian Share -->
