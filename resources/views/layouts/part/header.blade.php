@@ -8,7 +8,7 @@
   <body>
    <nav id="nav" class="bg-white shadow-lg">
     <div class="container mx-auto flex items-center justify-between py-5 px-20">
-      <a href="/"> <img src="img/logo.png" alt="logo perusahaan" class="w-32"></a>
+      <a href="/"> <img src="{{ asset('img/logo.png') }}" alt="logo perusahaan" class="w-32"></a>
         <div class="hidden md:flex space-x-8">
             <a href="/" class="text-gray-700 hover:text-blue-500">Beranda</a>
             <a href="{{ route('tentang.index') }}" class="text-gray-700 hover:text-blue-500">Tentang Kami</a>

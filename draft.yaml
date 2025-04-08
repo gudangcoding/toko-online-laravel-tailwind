@@ -18,7 +18,7 @@ models:
     user_id: id foreign:users
     total_harga: decimal:18,2
     status: enum:pending,proses,dikirim,komplain,selesai default:pending
-    status_pembayaran: enum:pending,dibayar,gagalselesai default:pending
+    status_pembayaran: enum:pending,dibayar,gagal,selesai default:pending
 
   OrderDetail:
     order_id: id foreign:Order
