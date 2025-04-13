@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Actions\Action;
@@ -33,16 +34,21 @@ class OrderResource extends Resource
                     ->required()
                     ->numeric(),
                 Forms\Components\Select::make('status')
+                ->label('Status Pengiriman')
                     ->options([
                         'Pending' => 'Pending',
-                        'Dibayar' => 'Dibayar',
+                        'proses' => 'proses',
+                        'Dikirim' => 'Dikirim',
+                        'Komplain' => 'Komplain',
                         'Selesai' => 'Selesai',
                     ])
                     ->required(),
-                Forms\Components\Textarea::make('alamat_pengiriman')
-                    ->required()
-                    ->columnSpanFull(),
+                // Forms\Components\Textarea::make('alamat_pengiriman')
+                //     ->default('user.alamat')
+                //     ->required()
+                //     ->columnSpanFull(),
                 Forms\Components\TextInput::make('status_pembayaran')
+                ->label('Status Pembayaran')
                     ->required(),
             ]);
     }
@@ -51,11 +57,11 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')->sortable(),
-                Tables\Columns\TextColumn::make('total_harga')->money('IDR')->sortable(),
-                Tables\Columns\TextColumn::make('status')->searchable(),
-                Tables\Columns\TextColumn::make('status_pembayaran'),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable(),
+                TextColumn::make('user.name')->sortable(),
+                TextColumn::make('total_harga')->money('IDR')->sortable(),
+                TextColumn::make('status')->searchable()->label('Pengiriman'),
+                TextColumn::make('status_pembayaran')->label('Pembayaran'),
+                TextColumn::make('created_at')->dateTime()->sortable(),
             ])
             ->filters([
                 Filter::make('created_at')
@@ -76,7 +82,7 @@ class OrderResource extends Resource
                             ->label('Status')
                             ->options([
                                 'Pending' => 'Pending',
-                                'Dibayar' => 'Dibayar',
+                                'Dikirim' => 'Dikirim',
                                 'Selesai' => 'Selesai',
                             ])
                             ->placeholder('Semua')
@@ -130,18 +136,20 @@ class OrderResource extends Resource
 
                         // $data = $query->get();
                         $data = $query->with('user')->get();
+                        $grandTotal = $data->sum('total_harga');
                         $pdf = Pdf::loadView('laporan.lap_pdf', [
                             'data' => $data,
                             'start' => $filters['created_at']['from'] ?? null,
                             'end' => $filters['created_at']['until'] ?? null,
+                            'grandTotal' => $grandTotal,
                         ]);
 
                         return response()->streamDownload(
-                            fn () => print($pdf->stream()),
-                            'Lap '.$filters['created_at']['from'].' sampai '.$filters['created_at']['until'].'.pdf'
+                            fn() => print ($pdf->stream()),
+                            'Lap ' . $filters['created_at']['from'] . ' sampai ' . $filters['created_at']['until'] . '.pdf'
                         );
-            
-                      
+
+
 
                     }),
             ])

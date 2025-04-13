@@ -15,7 +15,7 @@ class OrderController extends Controller
         $order = Order::with(['user', 'orderDetail'])
             ->where("user_id", Auth::id()) // hanya ambil order milik user login
             ->orderBy("id", "desc")
-            ->paginate(10);
+            ->paginate(5);
             $total = Order::where("user_id", $userId)->count();
             $selesai = Order::where("user_id", $userId)
                 ->where('status', 'Selesai')

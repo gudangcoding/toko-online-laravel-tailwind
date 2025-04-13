@@ -42,6 +42,12 @@
                 </tr>
             @endforelse
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" style="text-align: right;"><strong>Grand Total:</strong></td>
+                <td style="text-align: right;"><strong>Rp {{ number_format($grandTotal, 0, ',', '.') }}</strong></td>
+            </tr>
+        </tfoot>
     </table>
 </body>
 </html>
